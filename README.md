@@ -15,10 +15,10 @@ var macaddress = require('./index');
 API
 ---
 
-    .one(iface, callback) → string (async)
-    .one(callback)        → string (async)
-    .all(callback)        → { iface: { type: address } } (async)
-    .networkInterfaces()  → { iface: { type: address } } (sync)
+    (async)  .one(iface, callback) → string
+    (async)  .one(callback)        → string
+    (async)  .all(callback)        → { iface: { type: address } }
+    (sync)   .networkInterfaces()  → { iface: { type: address } }
 
 ---
 
