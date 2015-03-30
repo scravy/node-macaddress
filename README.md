@@ -1,6 +1,8 @@
 node-macaddress
 ===============
 
+[![Build Status](https://travis-ci.org/scravy/node-macaddress.svg?branch=master)](https://travis-ci.org/scravy/node-macaddress)
+
 Retrieve MAC addresses in Linux, OS X, and Windows.
 
 A common misconception about MAC addresses is that every *host* has a MAC address,
