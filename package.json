@@ -1,0 +1,29 @@
+{
+  "name": "node-macaddress",
+  "version": "0.1.0",
+  "description": "Get the MAC addresses (hardware addresses) of the hosts network interfaces.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scravy/node-macaddress.git"
+  },
+  "keywords": [
+    "mac",
+    "mac-address",
+    "hardware-address",
+    "network",
+    "system"
+  ],
+  "author": "Julian Fleischer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scravy/node-macaddress/issues"
+  },
+  "homepage": "https://github.com/scravy/node-macaddress",
+  "dependencies": {
+    "async": "^0.9.0"
+  }
+}
