@@ -14,7 +14,7 @@ lib.networkInterfaces = function () {
                 addresses[(address.family || "").toLowerCase()] = address.address;
                 hasAddresses = true;
                 if (address.mac) {
-                    addresses['mac'] = address.mac;
+                    addresses.mac = address.mac;
                 }
             }
         });
@@ -54,7 +54,7 @@ lib.one = function (iface, callback) {
 
         var ifaces = lib.networkInterfaces();
         var alleged = [ 'eth0', 'eth1', 'en0', 'en1' ];
-        var iface = ifaces[0];
+        iface = ifaces[0];
         for (var i = 0; i < alleged.length; i++) {
             if (ifaces[alleged[i]]) {
                 iface = alleged[i];
