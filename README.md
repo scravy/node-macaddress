@@ -27,7 +27,7 @@ npm install --save node-macaddress
 ```
 
 ```JavaScript
-var macaddress = require('./index');
+var macaddress = require('node-macaddress');
 ```
 
 API + Examples
