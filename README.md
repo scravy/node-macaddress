@@ -5,8 +5,8 @@ node-macaddress
 
 Retrieve MAC addresses in Linux, OS X, and Windows.
 
-A common misconception about MAC addresses is that every *host* has a MAC address,
-while a host may have multiple MAC addresses – since every network interface may
+A common misconception about MAC addresses is that every *host* had *one* MAC address,
+while a host may have *multiple* MAC addresses – since *every network interface* may
 have its own MAC address.
 
 This library allows to discover the MAC address per network interface and chooses
