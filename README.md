@@ -13,7 +13,7 @@ the host system (see `API + Examples` below).
 
 **Features:**
 
-+ works in `Linux`, `Mac OS X`, `Windows`, and on most `UNIX` systems.
++ works on `Linux`, `Mac OS X`, `Windows`, and on most `UNIX` systems.
 + `io.js` reports MAC addresses in `os.networkInterfaces()`, this library utilizes this information when available.
 + also features a sane replacement for `os.networkInterfaces()` (see `API + Examples` below).
 
