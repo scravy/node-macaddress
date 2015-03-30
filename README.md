@@ -1,10 +1,26 @@
 node-macaddress
 ===============
 
+Retrieve MAC addresses in Linux, OS X, and Windows.
+
+A common misconception about MAC addresses is that every *host* has a MAC address,
+while a host may have multiple MAC addresses – since every network interface may
+have its own MAC address.
+
+This library allows to discover the MAC address per network interface and chooses
+an appropriate interface if all you're interested in is *one* MAC address identifying
+the host system (see `API + Examples` below).
+
+**Features:**
+
++ works in `Linux`, `Mac OS X`, `Windows`, and on most `UNIX` systems.
++ `io.js` reports MAC addresses in `os.networkInterfaces()`, this library utilizes this information when available.
++ also features a sane replacement for `os.networkInterfaces()` (see `API + Examples` below).
+
 Usage
 -----
 
-```BASH
+```
 npm install --save node-macaddress
 ```
 
@@ -12,8 +28,8 @@ npm install --save node-macaddress
 var macaddress = require('./index');
 ```
 
-API
----
+API + Examples
+--------------
 
     (async)  .one(iface, callback) → string
     (async)  .one(callback)        → string
@@ -27,7 +43,7 @@ API
 Retrieves the MAC address of the given `iface`.
 
 If `iface` is omitted, this function automatically chooses an
-appropriate device (e.g. `eth0` in linux, `en0` in OS X, etc.).
+appropriate device (e.g. `eth0` in Linux, `en0` in OS X, etc.).
 
 **Without `iface` parameter:**
 
