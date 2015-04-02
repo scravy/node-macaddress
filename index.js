@@ -54,7 +54,7 @@ lib.one = function (iface, callback) {
 
         var ifaces = lib.networkInterfaces();
         var alleged = [ 'eth0', 'eth1', 'en0', 'en1' ];
-        iface = ifaces[0];
+        iface = ifaces[Object.keys(ifaces)[0]];
         for (var i = 0; i < alleged.length; i++) {
             if (ifaces[alleged[i]]) {
                 iface = alleged[i];
