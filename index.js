@@ -63,14 +63,15 @@ lib.one = function (iface, callback) {
         }
         if (!ifaces[iface]) {
             callback("no interfaces found", null);
-            return;
+            return null;
         }
         if (ifaces[iface].mac) {
             callback(null, ifaces[iface].mac);
-            return;
+            return ifaces[iface].mac;
         }
     }
     _getMacAddress(iface, callback);
+    return null;
 };
 
 lib.all = function (callback) {
@@ -84,12 +85,22 @@ lib.all = function (callback) {
         }
     });
 
+    if (Object.keys(resolve).length == 0) {
+        if (typeof callback === 'function') {
+            callback(null, ifaces);
+        }
+        return ifaces;
+    }
+
     async.parallel(resolve, function (err, result) {
         Object.keys(result).forEach(function (iface) {
             ifaces[iface].mac = result[iface];
         });
-        callback(null, ifaces);
+        if (typeof callback === 'function') {
+            callback(null, ifaces);
+        }
     });
+    return null;
 };
 
 module.exports = lib;
