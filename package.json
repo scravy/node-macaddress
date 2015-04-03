@@ -1,6 +1,6 @@
 {
   "name": "node-macaddress",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "Get the MAC addresses (hardware addresses) of the hosts network interfaces.",
   "main": "index.js",
   "scripts": {

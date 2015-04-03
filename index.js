@@ -62,15 +62,21 @@ lib.one = function (iface, callback) {
             }
         }
         if (!ifaces[iface]) {
-            callback("no interfaces found", null);
+            if (typeof callback === 'function') {
+                callback("no interfaces found", null);
+            }
             return null;
         }
         if (ifaces[iface].mac) {
-            callback(null, ifaces[iface].mac);
+            if (typeof callback === 'function') {
+                callback(null, ifaces[iface].mac);
+            }
             return ifaces[iface].mac;
         }
     }
-    _getMacAddress(iface, callback);
+    if (typeof callback === 'function') {
+        _getMacAddress(iface, callback);
+    }
     return null;
 };
 

@@ -3,3 +3,4 @@
 .*.swp
 /.npmcache
 /dist
+*.log
