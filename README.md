@@ -16,8 +16,10 @@ the host system (see `API + Examples` below).
 **Features:**
 
 + works on `Linux`, `Mac OS X`, `Windows`, and on most `UNIX` systems.
-+ `io.js` reports MAC addresses in `os.networkInterfaces()`, this library utilizes this information when available.
-+ also features a sane replacement for `os.networkInterfaces()` (see `API + Examples` below).
++ `node ≥ 0.12` and `io.js` report MAC addresses in `os.networkInterfaces()`
+  this library utilizes this information when available.
++ also features a sane replacement for `os.networkInterfaces()`
+  (see `API + Examples` below).
 
 Usage
 -----
