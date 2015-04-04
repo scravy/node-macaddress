@@ -25,9 +25,5 @@
   "homepage": "https://github.com/scravy/node-macaddress",
   "dependencies": {
     "async": "^0.9.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-jshint": "^1.9.4"
   }
 }
