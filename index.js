@@ -1,7 +1,31 @@
 var os = require('os');
-var async = require('async');
 
 var lib = {};
+
+function parallel(tasks, done) {
+    var results = [];
+    var errs = [];
+    var length = 0;
+    var doneLength = 0;
+    function doneIt(ix, err, result) {
+        if (err) {
+            errs[ix] = err;
+        } else {
+            results[ix] = result;
+        }
+        doneLength += 1;
+        if (doneLength >= length) {
+            done(errs.length > 0 ? errs : errs, results);
+        }
+    }
+    Object.keys(tasks).forEach(function (key) {
+        length += 1;
+        var task = tasks[key];
+        (global.setImmediate || global.setTimeout)(function () {
+            task(doneIt.bind(null, key), 1);
+        });
+    });
+}
 
 lib.networkInterfaces = function () {
     var ifaces = os.networkInterfaces();
@@ -98,7 +122,7 @@ lib.all = function (callback) {
         return ifaces;
     }
 
-    async.parallel(resolve, function (err, result) {
+    parallel(resolve, function (err, result) {
         Object.keys(result).forEach(function (iface) {
             ifaces[iface].mac = result[iface];
         });
