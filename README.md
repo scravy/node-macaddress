@@ -20,6 +20,7 @@ the host system (see `API + Examples` below).
   this library utilizes this information when available.
 + also features a sane replacement for `os.networkInterfaces()`
   (see `API + Examples` below).
++ works with stoneage node versions ≥ v0.8 (...)
 
 Usage
 -----
