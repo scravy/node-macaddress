@@ -91,7 +91,7 @@ lib.all = function (callback) {
         }
     });
 
-    if (Object.keys(resolve).length == 0) {
+    if (Object.keys(resolve).length === 0) {
         if (typeof callback === 'function') {
             callback(null, ifaces);
         }
