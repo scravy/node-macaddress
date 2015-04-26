@@ -26,7 +26,7 @@ Usage
 -----
 
 ```
-npm install --save node-macaddress
+npm install --save macaddress
 ```
 
 ```JavaScript
