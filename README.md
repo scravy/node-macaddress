@@ -30,7 +30,7 @@ npm install --save macaddress
 ```
 
 ```JavaScript
-var macaddress = require('node-macaddress');
+var macaddress = require('macaddress');
 ```
 
 API + Examples
