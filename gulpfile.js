@@ -1,4 +1,4 @@
-// vim set et sw=2 ts=2
+// vim: set et sw=2 ts=2
 var gulp = require('gulp');
 
 var jshint = require('gulp-jshint');
