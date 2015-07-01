@@ -4,7 +4,7 @@
   "description": "Get the MAC addresses (hardware addresses) of the hosts network interfaces.",
   "main": "index.js",
   "scripts": {
-    "test": "jshint *.js && node test.js"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
@@ -22,8 +22,5 @@
   "bugs": {
     "url": "https://github.com/scravy/node-macaddress/issues"
   },
-  "homepage": "https://github.com/scravy/node-macaddress",
-  "devDependencies": {
-    "jshint": "^2.8.0"
-  }
+  "homepage": "https://github.com/scravy/node-macaddress"
 }
