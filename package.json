@@ -1,6 +1,6 @@
 {
   "name": "macaddress",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Get the MAC addresses (hardware addresses) of the hosts network interfaces.",
   "main": "index.js",
   "scripts": {
