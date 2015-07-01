@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/scravy/node-macaddress",
   "devDependencies": {
-    "gulp": "^3.9.0",
+    "gulp": "^3.8.0",
     "gulp-jshint": "^1.9.4"
   }
 }
