@@ -22,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/scravy/node-macaddress/issues"
   },
-  "homepage": "https://github.com/scravy/node-macaddress"
+  "homepage": "https://github.com/scravy/node-macaddress",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.1"
+  }
 }

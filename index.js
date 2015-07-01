@@ -1,3 +1,4 @@
+/* jshint node: true */
 'use strict';
 
 var os = require('os');
@@ -99,7 +100,7 @@ lib.one = function (iface, callback) {
             if (typeof callback === 'function') {
                 process.nextTick(function() {
                     callback(null, ifaces[iface].mac);
-                })
+                });
             }
             return ifaces[iface].mac;
         }
