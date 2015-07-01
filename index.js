@@ -23,7 +23,7 @@ function parallel(tasks, done) {
     Object.keys(tasks).forEach(function (key) {
         length += 1;
         var task = tasks[key];
-        (global.setImmediate || global.setTimeout)(function () {
+        (process.nextTick || global.setImmediate || global.setTimeout)(function () {
             task(doneIt.bind(null, key), 1);
         });
     });
@@ -89,13 +89,17 @@ lib.one = function (iface, callback) {
         }
         if (!ifaces[iface]) {
             if (typeof callback === 'function') {
-                callback("no interfaces found", null);
+                process.nextTick(function() {
+                    callback(new Error("no interfaces found"), null);
+                });
             }
             return null;
         }
         if (ifaces[iface].mac) {
             if (typeof callback === 'function') {
-                callback(null, ifaces[iface].mac);
+                process.nextTick(function() {
+                    callback(null, ifaces[iface].mac);
+                })
             }
             return ifaces[iface].mac;
         }
@@ -119,7 +123,9 @@ lib.all = function (callback) {
 
     if (Object.keys(resolve).length === 0) {
         if (typeof callback === 'function') {
-            callback(null, ifaces);
+            process.nextTick(function(){
+                callback(null, ifaces);
+            });
         }
         return ifaces;
     }
