@@ -1,3 +1,6 @@
+/* jshint node: true */
+'use strict';
+
 var macaddress = require('./index');
 
 var sync = macaddress.one(function (err, mac) {
