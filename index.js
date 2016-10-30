@@ -31,8 +31,21 @@ function parallel(tasks, done) {
 }
 
 lib.networkInterfaces = function () {
-    var ifaces = os.networkInterfaces();
     var allAddresses = {};
+
+    try {
+        var ifaces = os.networkInterfaces();
+    } catch (e) {
+      // At October 2016 WSL does not support os.networkInterfaces() and throws
+      // Return empty object as if no interfaces were found
+      // https://github.com/Microsoft/BashOnWindows/issues/468
+        if (e.syscall === 'uv_interface_addresses') {
+            return allAddresses;
+        } else {
+            throw e;
+        };
+    };
+
     Object.keys(ifaces).forEach(function (iface) {
         var addresses = {};
         var hasAddresses = false;
@@ -67,7 +80,7 @@ switch (os.platform()) {
     case 'sunos':
         _getMacAddress = require('./lib/unix.js');
         break;
-        
+
     default:
         console.warn("node-macaddress: Unkown os.platform(), defaulting to `unix'.");
         _getMacAddress = require('./lib/unix.js');
