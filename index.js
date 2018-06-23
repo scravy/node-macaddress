@@ -65,6 +65,7 @@ switch (os.platform()) {
 
     case 'darwin':
     case 'sunos':
+    case 'freebsd':
         _getMacAddress = require('./lib/unix.js');
         break;
         
