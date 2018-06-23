@@ -4,7 +4,7 @@ node-macaddress
 [![Build Status](https://travis-ci.org/scravy/node-macaddress.svg?branch=master)](https://travis-ci.org/scravy/node-macaddress)
 
 **!! IMPORANT !!**
-*Please upgrade to the latest release 0.2.9 – versions prior to this one are vulnerable to an arbitrary code execution attack which was fixed in https://github.com/scravy/node-macaddress/pull/16/files*
+*Please upgrade to the latest release 0.2.9 – versions prior to this one are vulnerable to an arbitrary code execution attack which was fixed in https://github.com/scravy/node-macaddress/pull/20*
 
 Retrieve MAC addresses in Linux, OS X, and Windows.
 
