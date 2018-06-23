@@ -69,7 +69,7 @@ switch (os.platform()) {
         break;
         
     default:
-        console.warn("node-macaddress: Unkown os.platform(), defaulting to `unix'.");
+        console.warn("node-macaddress: Unknown os.platform(), defaulting to 'unix'.");
         _getMacAddress = require('./lib/unix.js');
         break;
 
