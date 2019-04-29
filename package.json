@@ -3,6 +3,7 @@
   "version": "0.2.9",
   "description": "Get the MAC addresses (hardware addresses) of the hosts network interfaces.",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "node test.js"
   },
