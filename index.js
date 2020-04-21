@@ -90,6 +90,19 @@ switch (os.platform()) {
 }
 
 lib.one = function (iface, callback) {
+    if (!iface && !callback) {
+        return new Promise(function (resolve, reject) {
+            lib.one(function (err, mac) {
+                if (err) {
+                    reject(new Error(err));
+                    return;
+                }
+
+                resolve(mac);
+            });
+        });
+    }
+
     if (typeof iface === 'function') {
         callback = iface;
 
@@ -126,6 +139,18 @@ lib.one = function (iface, callback) {
 };
 
 lib.all = function (callback) {
+    if (!callback) {
+        return new Promise(function (resolve, reject) {
+            lib.all(function (err, all) {
+                if (err) {
+                    reject(new Error(err));
+                    return;
+                }
+
+                resolve(all);
+            });
+        });
+    }
 
     var ifaces = lib.networkInterfaces();
     var resolve = {};
