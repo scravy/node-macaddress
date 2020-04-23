@@ -21,6 +21,7 @@ the host system (see `API + Examples` below).
 + also features a sane replacement for `os.networkInterfaces()`
   (see `API + Examples` below).
 + works with stoneage node versions ≥ v0.8 (...)
+* Promise support
 
 Usage
 -----
@@ -37,7 +38,9 @@ API + Examples
 --------------
 
     (async)  .one(iface, callback) → string
+    (async)  .one(iface)           → Promise<string>
     (async)  .one(callback)        → string
+    (async)  .all()                → Promise<{ iface: { type: address } }>
     (async)  .all(callback)        → { iface: { type: address } }
     (sync)   .networkInterfaces()  → { iface: { type: address } }
 
@@ -58,6 +61,14 @@ macaddress.one(function (err, mac) {
 });
 ```
 
+or using Promise
+
+```JavaScript
+macaddress.one.then(function (mac) {
+  console.log("Mac address for this host: %s", mac);  
+});
+```
+
 ```
 → Mac address for this host: ab:42:de:13:ef:37
 ```
@@ -66,6 +77,13 @@ macaddress.one(function (err, mac) {
 
 ```JavaScript
 macaddress.one('awdl0', function (err, mac) {
+  console.log("Mac address for awdl0: %s", mac);  
+});
+```
+or using Promise
+
+```JavaScript
+macaddress.one('awdl0').then(function (mac) {
   console.log("Mac address for awdl0: %s", mac);  
 });
 ```
@@ -82,6 +100,13 @@ Retrieves the MAC addresses for all non-internal interfaces.
 
 ```JavaScript
 macaddress.all(function (err, all) {
+  console.log(JSON.stringify(all, null, 2));
+});
+```
+or using Promise
+
+```JavaScript
+macaddress.all().then(function (all) {
   console.log(JSON.stringify(all, null, 2));
 });
 ```
