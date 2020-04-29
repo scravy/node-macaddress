@@ -90,9 +90,9 @@ switch (os.platform()) {
 }
 
 lib.one = function (iface, callback) {
-    if (!iface && !callback) {
+    if (!callback && typeof iface !== 'function') {
         return new Promise(function (resolve, reject) {
-            lib.one(function (err, mac) {
+            lib.one(iface, function (err, mac) {
                 if (err) {
                     reject(new Error(err));
                     return;
