@@ -21,7 +21,7 @@ the host system (see `API + Examples` below).
 + also features a sane replacement for `os.networkInterfaces()`
   (see `API + Examples` below).
 + works with stoneage node versions ≥ v0.8 (...)
-* Promise support
++ Promise support
 
 Usage
 -----
