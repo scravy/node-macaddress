@@ -4,6 +4,7 @@ os:
   - osx
 node_js:
   - stable
+  - lts/*
   - "10.5"
   - "8.11"
   - "6.14"
