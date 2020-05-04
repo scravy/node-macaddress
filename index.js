@@ -69,9 +69,12 @@ lib.networkInterfaces = function () {
 };
 
 var _getMacAddress;
+var _validIfaceRegExp = '^[a-z0-9]+$';
 switch (os.platform()) {
 
     case 'win32':
+       // windows has long interface names which may contain spaces and dashes
+        _validIfaceRegExp = '^[a-z0-9 -]+$';
         _getMacAddress = require('./lib/windows.js');
         break;
 
@@ -92,12 +95,14 @@ switch (os.platform()) {
 
 }
 
-var validIfaceRegExp = '^[a-z0-9]+$';
-var validIfaceRegExpObj = new RegExp(validIfaceRegExp, 'i');
+var validIfaceRegExp = new RegExp(_validIfaceRegExp, 'i');
 
 function getMacAddress(iface, callback) {
 
-    if (!validIfaceRegExpObj.test(iface)) {
+    // some platform specific ways of resolving the mac address pass the name
+    // of the interface down to some command processor, so check for a well
+    // formed string here.
+    if (!validIfaceRegExp.test(iface)) {
         callback(new Error([
             'invalid iface: \'', iface,
             '\' (must conform to reg exp /',
@@ -124,16 +129,35 @@ function promisify(func) {
     });
 }
 
-lib.one = function (iface, callback) {
-    if (!callback && typeof iface !== 'function') {
+lib.one = function () {
+    // one() can be invoked in several ways:
+    // one() -> Promise<string>
+    // one(iface: string) -> Promise<string>
+    // one(iface: string, callback) -> async, yields a string
+    // one(callback) -> async, yields a string
+    var iface = null;
+    var callback = null;
+    if (arguments.length >= 1) {
+        if (typeof arguments[0] === 'function') {
+            callback = arguments[0];
+        } else if (typeof arguments[0] === 'string') {
+            iface = arguments[0];
+        }
+        if (arguments.length >= 2) {
+            if (typeof arguments[1] === 'function') {
+                callback = arguments[1];
+            }
+        }
+    }
+    if (!callback) {
         return promisify(function (callback) {
             lib.one(iface, callback);
         });
     }
 
-    if (typeof iface === 'function') {
-        callback = iface;
-
+    if (iface) {
+        getMacAddress(iface, callback);
+    } else {
         var ifaces = lib.networkInterfaces();
         var alleged = [ 'eth0', 'eth1', 'en0', 'en1', 'en2', 'en3', 'en4' ];
         iface = Object.keys(ifaces)[0];
@@ -159,9 +183,6 @@ lib.one = function (iface, callback) {
             }
             return ifaces[iface].mac;
         }
-    }
-    if (typeof callback === 'function') {
-        getMacAddress(iface, callback);
     }
     return null;
 };

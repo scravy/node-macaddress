@@ -19,3 +19,13 @@ macaddress.all(function (err, all) {
 });
 
 console.log(JSON.stringify(macaddress.networkInterfaces(), null, 2));
+
+if (typeof Promise !== 'undefined') {
+  macaddress.one().then(function (result) {
+    console.log("Mac address for this host using Promises: %s", result);
+  });
+  macaddress.all().then(function (result) {
+    console.log("all() using promises");
+    console.log(JSON.stringify(result, null, 2));
+  });
+}
