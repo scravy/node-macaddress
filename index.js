@@ -30,6 +30,9 @@ function parallel(tasks, done) {
     });
 }
 
+// Retrieves all interfaces that do feature some non-internal address.
+// This function does NOT employ caching as to reflect the current state
+// of the machine accurately.
 lib.networkInterfaces = function () {
     var allAddresses = {};
 
@@ -53,7 +56,7 @@ lib.networkInterfaces = function () {
             if (!address.internal) {
                 addresses[(address.family || "").toLowerCase()] = address.address;
                 hasAddresses = true;
-                if (address.mac) {
+                if (address.mac && address.mac !== '00:00:00:00:00:00') {
                     addresses.mac = address.mac;
                 }
             }
@@ -89,17 +92,42 @@ switch (os.platform()) {
 
 }
 
+var validIfaceRegExp = '^[a-z0-9]+$';
+var validIfaceRegExpObj = new RegExp(validIfaceRegExp, 'i');
+
+function getMacAddress(iface, callback) {
+
+    if (!validIfaceRegExpObj.test(iface)) {
+        callback(new Error([
+            'invalid iface: \'', iface,
+            '\' (must conform to reg exp /',
+            validIfaceRegExp, '/)'
+        ].join('')), null);
+        return;
+    }
+
+    _getMacAddress(iface, callback);
+}
+
+function promisify(func) {
+    return new Promise(function (resolve, reject) {
+        func(function (err, data) {
+            if (err) {
+                if (!err instanceof Error) {
+                    err = new Error(err);
+                }
+                reject(err);
+                return;
+            }
+            resolve(data);
+        });
+    });
+}
+
 lib.one = function (iface, callback) {
     if (!callback && typeof iface !== 'function') {
-        return new Promise(function (resolve, reject) {
-            lib.one(iface, function (err, mac) {
-                if (err) {
-                    reject(new Error(err));
-                    return;
-                }
-
-                resolve(mac);
-            });
+        return promisify(function (callback) {
+            lib.one(iface, callback);
         });
     }
 
@@ -133,23 +161,14 @@ lib.one = function (iface, callback) {
         }
     }
     if (typeof callback === 'function') {
-        _getMacAddress(iface, callback);
+        getMacAddress(iface, callback);
     }
     return null;
 };
 
 lib.all = function (callback) {
-    if (!callback) {
-        return new Promise(function (resolve, reject) {
-            lib.all(function (err, all) {
-                if (err) {
-                    reject(new Error(err));
-                    return;
-                }
-
-                resolve(all);
-            });
-        });
+    if (typeof callback !== 'function') {
+        return promisify(lib.all);
     }
 
     var ifaces = lib.networkInterfaces();
@@ -157,15 +176,13 @@ lib.all = function (callback) {
 
     Object.keys(ifaces).forEach(function (iface) {
         if (!ifaces[iface].mac) {
-            resolve[iface] = _getMacAddress.bind(null, iface);
+            resolve[iface] = getMacAddress.bind(null, iface);
         }
     });
 
     if (Object.keys(resolve).length === 0) {
         if (typeof callback === 'function') {
-            process.nextTick(function(){
-                callback(null, ifaces);
-            });
+            process.nextTick(callback.bind(null, null, ifaces));
         }
         return ifaces;
     }
