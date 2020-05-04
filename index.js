@@ -36,9 +36,9 @@ lib.networkInterfaces = function () {
     try {
         var ifaces = os.networkInterfaces();
     } catch (e) {
-      // At October 2016 WSL does not support os.networkInterfaces() and throws
-      // Return empty object as if no interfaces were found
-      // https://github.com/Microsoft/BashOnWindows/issues/468
+        // At October 2016 WSL does not support os.networkInterfaces() and throws
+        // Return empty object as if no interfaces were found
+        // https://github.com/Microsoft/BashOnWindows/issues/468
         if (e.syscall === 'uv_interface_addresses') {
             return allAddresses;
         } else {
@@ -107,7 +107,7 @@ lib.one = function (iface, callback) {
         callback = iface;
 
         var ifaces = lib.networkInterfaces();
-        var alleged = [ 'eth0', 'eth1', 'en0', 'en1' ];
+        var alleged = [ 'eth0', 'eth1', 'en0', 'en1', 'en2', 'en3', 'en4' ];
         iface = Object.keys(ifaces)[0];
         for (var i = 0; i < alleged.length; i++) {
             if (ifaces[alleged[i]]) {
