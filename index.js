@@ -1,9 +1,8 @@
 /* jshint node: true */
 'use strict';
 
-var os = require('os');
-
 var lib = {};
+var nextTick = process.nextTick || global.setImmediate || global.setTimeout;
 
 function parallel(tasks, done) {
     var results = [];
@@ -24,95 +23,16 @@ function parallel(tasks, done) {
     Object.keys(tasks).forEach(function (key) {
         length += 1;
         var task = tasks[key];
-        (process.nextTick || global.setImmediate || global.setTimeout)(function () {
+        nextTick(function () {
             task(doneIt.bind(null, key), 1);
         });
     });
 }
 
-// Retrieves all interfaces that do feature some non-internal address.
-// This function does NOT employ caching as to reflect the current state
-// of the machine accurately.
-lib.networkInterfaces = function () {
-    var allAddresses = {};
+lib.getMacAddress = require('./lib/getmacaddress.js');
+lib.getAllInterfaces = require('./lib/getallinterfaces.js');
 
-    try {
-        var ifaces = os.networkInterfaces();
-    } catch (e) {
-        // At October 2016 WSL does not support os.networkInterfaces() and throws
-        // Return empty object as if no interfaces were found
-        // https://github.com/Microsoft/BashOnWindows/issues/468
-        if (e.syscall === 'uv_interface_addresses') {
-            return allAddresses;
-        } else {
-            throw e;
-        };
-    };
-
-    Object.keys(ifaces).forEach(function (iface) {
-        var addresses = {};
-        var hasAddresses = false;
-        ifaces[iface].forEach(function (address) {
-            if (!address.internal) {
-                addresses[(address.family || "").toLowerCase()] = address.address;
-                hasAddresses = true;
-                if (address.mac && address.mac !== '00:00:00:00:00:00') {
-                    addresses.mac = address.mac;
-                }
-            }
-        });
-        if (hasAddresses) {
-            allAddresses[iface] = addresses;
-        }
-    });
-    return allAddresses;
-};
-
-var _getMacAddress;
-var _validIfaceRegExp = '^[a-z0-9]+$';
-switch (os.platform()) {
-
-    case 'win32':
-       // windows has long interface names which may contain spaces and dashes
-        _validIfaceRegExp = '^[a-z0-9 -]+$';
-        _getMacAddress = require('./lib/windows.js');
-        break;
-
-    case 'linux':
-        _getMacAddress = require('./lib/linux.js');
-        break;
-
-    case 'darwin':
-    case 'sunos':
-    case 'freebsd':
-        _getMacAddress = require('./lib/unix.js');
-        break;
-
-    default:
-        console.warn("node-macaddress: Unknown os.platform(), defaulting to 'unix'.");
-        _getMacAddress = require('./lib/unix.js');
-        break;
-
-}
-
-var validIfaceRegExp = new RegExp(_validIfaceRegExp, 'i');
-
-function getMacAddress(iface, callback) {
-
-    // some platform specific ways of resolving the mac address pass the name
-    // of the interface down to some command processor, so check for a well
-    // formed string here.
-    if (!validIfaceRegExp.test(iface)) {
-        callback(new Error([
-            'invalid iface: \'', iface,
-            '\' (must conform to reg exp /',
-            validIfaceRegExp, '/)'
-        ].join('')), null);
-        return;
-    }
-
-    _getMacAddress(iface, callback);
-}
+lib.networkInterfaces = require('./lib/networkinterfaces.js');
 
 function promisify(func) {
     return new Promise(function (resolve, reject) {
@@ -156,7 +76,7 @@ lib.one = function () {
     }
 
     if (iface) {
-        getMacAddress(iface, callback);
+        lib.getMacAddress(iface, callback);
     } else {
         var ifaces = lib.networkInterfaces();
         var alleged = [ 'eth0', 'eth1', 'en0', 'en1', 'en2', 'en3', 'en4' ];
@@ -169,7 +89,7 @@ lib.one = function () {
         }
         if (!ifaces[iface]) {
             if (typeof callback === 'function') {
-                process.nextTick(function() {
+                nextTick(function() {
                     callback(new Error("no interfaces found"), null);
                 });
             }
@@ -177,7 +97,7 @@ lib.one = function () {
         }
         if (ifaces[iface].mac) {
             if (typeof callback === 'function') {
-                process.nextTick(function() {
+                nextTick(function() {
                     callback(null, ifaces[iface].mac);
                 });
             }
@@ -197,13 +117,13 @@ lib.all = function (callback) {
 
     Object.keys(ifaces).forEach(function (iface) {
         if (!ifaces[iface].mac) {
-            resolve[iface] = getMacAddress.bind(null, iface);
+            resolve[iface] = lib.getMacAddress.bind(null, iface);
         }
     });
 
     if (Object.keys(resolve).length === 0) {
         if (typeof callback === 'function') {
-            process.nextTick(callback.bind(null, null, ifaces));
+            nextTick(callback.bind(null, null, ifaces));
         }
         return ifaces;
     }
