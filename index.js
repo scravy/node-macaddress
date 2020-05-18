@@ -66,7 +66,7 @@ lib.one = function () {
         }
         lib.getMacAddress(d, cb);
     };
-    util.iterate(args, lib.getMacAddress, callback);
+    util.iterate(args, getMacAddress, callback);
 };
 
 lib.all = function (callback) {
