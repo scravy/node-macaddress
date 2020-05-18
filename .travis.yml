@@ -19,3 +19,7 @@ node_js:
   - iojs-v1.0.4
 install:
   - npm install
+jobs:
+  exclude:
+    - os: windows
+      node_js: stable
