@@ -1,7 +1,7 @@
 /* jshint node: true */
 'use strict';
 
-var macaddress = require('.');
+var macaddress = require('./index.js');
 
 macaddress.one(function (err, mac) {
   if (err || !/[a-f0-9]{2}(:[a-f0-9]{2}){5}/.test(mac)) {
