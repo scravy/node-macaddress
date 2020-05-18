@@ -1,15 +1,15 @@
 /* jshint node: true */
 'use strict';
 
-var macaddress = require('./index');
+var macaddress = require('.');
 
-var sync = macaddress.one(function (err, mac) {
+macaddress.one(function (err, mac) {
   if (err || !/[a-f0-9]{2}(:[a-f0-9]{2}){5}/.test(mac)) {
+    console.log(mac + " does not work");
     throw err || mac;
   }
-  console.log("Mac address for this host: %s", mac);  
+  console.log("Mac address for this host: %s", mac);
 });
-console.log("Mac address obtained synchronously: %s", sync);
 
 macaddress.all(function (err, all) {
   if (err) {

@@ -55,7 +55,7 @@ lib.one = function () {
         }
     });
     if (best.length > 0) {
-        util.nextTick(callback.bind(null, best[0]));
+        util.nextTick(callback.bind(null, null, best[0]));
         return;
     }
     args.push(lib.getAllInterfaces);
