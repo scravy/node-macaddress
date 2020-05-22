@@ -8,6 +8,12 @@ lib.getMacAddress     = require("./lib/getmacaddress.js");
 lib.getAllInterfaces  = require("./lib/getallinterfaces.js");
 lib.networkInterfaces = require("./lib/networkinterfaces.js");
 
+// devices like en0 (mac), eth3 (linux), Ethernet (windows), etc. are preferred
+var goodIfaces = new RegExp("^((en|eth)[0-9]+|ethernet)$", "i");
+
+// https://github.com/scravy/node-macaddress/issues/32
+var badIfaces = new RegExp("^(vboxnet[0-9]+)$", "i");
+
 lib.one = function () {
     // one() can be invoked in several ways:
     // one() -> Promise<string>
@@ -41,21 +47,47 @@ lib.one = function () {
     var addresses = {};
     var best = [];
     var args = [];
-    Object.keys(ifaces).forEach(function (d) {
-        args.push(d);
-        if (typeof ifaces[d].mac === "string" && ifaces[d].mac !== "00:00:00:00:00:00") {
-            addresses[d] = ifaces[d].mac;
-            if (ifaces[d].ipv4 || ifaces[d].ipv6) {
-                if (ifaces[d].ipv4 && ifaces[d].ipv6) {
-                    best.unshift(addresses[d]);
-                } else {
-                    best.push(addresses[d]);
+    Object.keys(ifaces).forEach(function (name) {
+        args.push(name);
+        var score = 0;
+        var iface = ifaces[name];
+        if (typeof iface.mac === "string" && iface.mac !== "00:00:00:00:00:00") {
+            addresses[name] = iface.mac;
+            if (iface.ipv4 || iface.ipv6) {
+                score += 1;
+                if (iface.ipv4 && iface.ipv6) {
+                    score += 1;
                 }
             }
+            if (goodIfaces.test(name)) {
+                score += 2;
+            }
+            if (badIfaces.test(name)) {
+                score -= 3;
+            }
+            best.push({
+                name: name,
+                score: score,
+                mac: iface.mac
+            });
         }
     });
     if (best.length > 0) {
-        util.nextTick(callback.bind(null, null, best[0]));
+        best.sort(function (left, right) {
+            // the following will sort items with a higher score to the beginning
+            var comparison = right.score - left.score;
+            if (comparison !== 0) {
+                return comparison;
+            }
+            if (left.name < right.name) {
+                return -1;
+            }
+            if (left.name > right.name) {
+                return 1;
+            }
+            return 0;
+        });
+        util.nextTick(callback.bind(null, null, best[0].mac));
         return;
     }
     args.push(lib.getAllInterfaces);
