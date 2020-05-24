@@ -53,11 +53,11 @@ lib.one = function () {
         var iface = ifaces[name];
         if (typeof iface.mac === "string" && iface.mac !== "00:00:00:00:00:00") {
             addresses[name] = iface.mac;
-            if (iface.ipv4 || iface.ipv6) {
+            if (iface.ipv4) {
                 score += 1;
-                if (iface.ipv4 && iface.ipv6) {
-                    score += 1;
-                }
+            }
+            if (iface.ipv6) {
+                score += 1;
             }
             if (goodIfaces.test(name)) {
                 score += 2;
