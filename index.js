@@ -105,23 +105,19 @@ lib.all = function (callback) {
     if (typeof callback !== "function") {
         return util.promisify(lib.all);
     }
-
     var ifaces = lib.networkInterfaces();
     var resolve = {};
-
     Object.keys(ifaces).forEach(function (iface) {
         if (!ifaces[iface].mac) {
             resolve[iface] = lib.getMacAddress.bind(null, iface);
         }
     });
-
     if (Object.keys(resolve).length === 0) {
         if (typeof callback === "function") {
             util.nextTick(callback.bind(null, null, ifaces));
         }
         return ifaces;
     }
-
     util.parallel(resolve, function (err, result) {
         Object.keys(result).forEach(function (iface) {
             ifaces[iface].mac = result[iface];
