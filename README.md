@@ -64,7 +64,7 @@ macaddress.one(function (err, mac) {
 or using Promise
 
 ```JavaScript
-macaddress.one.then(function (mac) {
+macaddress.one().then(function (mac) {
   console.log("Mac address for this host: %s", mac);  
 });
 ```
