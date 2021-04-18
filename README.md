@@ -13,6 +13,10 @@ This library allows to discover the MAC address per network interface and choose
 an appropriate interface if all you're interested in is *one* MAC address identifying
 the host system (see `API + Examples` below).
 
+A common misconception about this library is that it reports the mac address of the client that accesses some kind of backend. It does not. Reporting the mac address is not in any way similar to reporting the IP address of the client that accesses your application. This library reports the mac address of the server the application is running on. This useful for example for distributed/scaled applications, for example when generating UUIDs.
+
+Also it seems to be worth noting that this library is not intended to be used in a browser. There is no web api reporting the mac address of the machine (and that is a good thing).
+
 **Features:**
 
 + works on `Linux`, `Mac OS X`, `Windows`, and on most `UNIX` systems.
