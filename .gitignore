@@ -1,6 +1,8 @@
-.DS_Store
+.*
+!/.gitignore
+!/.editorconfig
+!/.travis.yml
+!/.github
 /node_modules
-.*.swp
-/.npmcache
 /dist
 *.log
