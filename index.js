@@ -108,7 +108,7 @@ lib.all = function (callback) {
     var ifaces = lib.networkInterfaces();
     var resolve = {};
     Object.keys(ifaces).forEach(function (iface) {
-        if (!ifaces[iface].mac) {
+        if (!ifaces[iface].mac || (os.platform() === 'darwin' && os.release().split('.')[0] >= 24)) {
             resolve[iface] = lib.getMacAddress.bind(null, iface);
         }
     });
