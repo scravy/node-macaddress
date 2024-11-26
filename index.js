@@ -52,6 +52,9 @@ lib.one = function () {
         args.push(name);
         var score = 0;
         var iface = ifaces[name];
+        if (os.platform() === 'darwin' && os.release().split('.')[0] >= 24) {
+            iface.mac = lib.getMacAddress.bind(null, iface);
+        }
         if (typeof iface.mac === "string" && iface.mac !== "00:00:00:00:00:00") {
             addresses[name] = iface.mac;
             if (iface.ipv4) {
