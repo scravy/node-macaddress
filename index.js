@@ -3,6 +3,7 @@
 
 var util = require("./lib/util.js");
 var lib = {};
+var os = require("os");
 
 lib.getMacAddress     = require("./lib/getmacaddress.js");
 lib.getAllInterfaces  = require("./lib/getallinterfaces.js");
