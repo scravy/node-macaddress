@@ -30,5 +30,10 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Ensure trusted publishing (clear token auth)
+        run: npm config delete //registry.npmjs.org/:_authToken || true
+
       - name: Publish
         run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ""
