@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/scravy/node-macaddress.git"
+    "url": "git+https://github.com/scravy/node-macaddress.git"
   },
   "keywords": [
     "mac",
