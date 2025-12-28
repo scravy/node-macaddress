@@ -3,6 +3,7 @@
 
 var util = require("./lib/util.js");
 var lib = {};
+var os = require("os");
 
 lib.getMacAddress     = require("./lib/getmacaddress.js");
 lib.getAllInterfaces  = require("./lib/getallinterfaces.js");
@@ -51,6 +52,9 @@ lib.one = function () {
         args.push(name);
         var score = 0;
         var iface = ifaces[name];
+        if (os.platform() === 'darwin' && os.release().split('.')[0] >= 24) {
+            iface.mac = lib.getMacAddress.bind(null, iface);
+        }
         if (typeof iface.mac === "string" && iface.mac !== "00:00:00:00:00:00") {
             addresses[name] = iface.mac;
             if (iface.ipv4) {
@@ -108,7 +112,7 @@ lib.all = function (callback) {
     var ifaces = lib.networkInterfaces();
     var resolve = {};
     Object.keys(ifaces).forEach(function (iface) {
-        if (!ifaces[iface].mac) {
+        if (!ifaces[iface].mac || (os.platform() === 'darwin' && os.release().split('.')[0] >= 24)) {
             resolve[iface] = lib.getMacAddress.bind(null, iface);
         }
     });
